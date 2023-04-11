@@ -23,6 +23,7 @@ services:
      #- --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.myresolver.acme.email=${LETS_ENCRYPT_EMAIL}
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --log.level=DEBUG
     ports:
       - "80:80"
       - "443:443"
@@ -39,6 +40,7 @@ services:
     volumes:
       - ./sonarr:/config
       - ${DATA_ROOT}:/data
+      - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     labels:
       - traefik.enable=true
@@ -56,6 +58,7 @@ services:
     volumes:
       - ./radarr:/config
       - ${DATA_ROOT}:/data
+      - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     labels:
       - traefik.enable=true
@@ -90,6 +93,7 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ${DOWNLOAD_ROOT}:/data/torrents
+      - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     labels:
       - traefik.enable=true
