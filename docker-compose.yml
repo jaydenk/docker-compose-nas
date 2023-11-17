@@ -201,7 +201,7 @@ services:
       - homepage.description=Bittorrent client
       - homepage.weight=5
       - homepage.widget.type=qbittorrent
-      - homepage.widget.url=http://vpn:8080
+      - homepage.widget.url=http://qbittorent:8080
       - homepage.widget.username=${QBITTORRENT_USERNAME}
       - homepage.widget.password=${QBITTORRENT_PASSWORD}
   sabnzbd:
@@ -215,8 +215,6 @@ services:
       - ./sabnzbd:/config
       - ${DATA_ROOT}:/data
     restart: always
-    ports:
-      - 8181:8181
     labels:
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
