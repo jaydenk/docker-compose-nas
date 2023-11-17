@@ -218,12 +218,16 @@ services:
       - ./sabnzbd:/config
       - ${DATA_ROOT}:/data
     restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8080/sabnzbd/ping" ]
+      interval: 5s
+      retries: 10
     labels:
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
       - traefik.http.routers.sabnzbd.tls=true
       - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
-      - traefik.http.services.sabnzbd.loadbalancer.server.port=8181
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - homepage.group=Media
       - homepage.name=Sabnzbd
       - homepage.icon=sabnzbd.png
