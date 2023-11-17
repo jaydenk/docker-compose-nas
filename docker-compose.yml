@@ -31,10 +31,10 @@ services:
     volumes:
       - ./letsencrypt:/letsencrypt
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    healthcheck:
-      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
-      interval: 5s
-      retries: 10
+#     healthcheck:
+#       test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+#       interval: 5s
+#       retries: 10
   sonarr:
     image: lscr.io/linuxserver/sonarr
     container_name: sonarr
