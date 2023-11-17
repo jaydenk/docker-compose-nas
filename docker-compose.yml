@@ -104,7 +104,7 @@ services:
       - homepage.widget.url=http://radarr:7878/radarr
       - homepage.widget.key=${RADARR_API_KEY}
   readarr:
-    image: linuxserver/readarr
+    image: lscr.io/linuxserver/readarr
     container_name: readarr
     environment:
       - PUID=${USER_ID}
