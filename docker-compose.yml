@@ -111,7 +111,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./radarr:/config
+      - ./lidarr:/config
       - ${DATA_ROOT}:/data
       - ${MEDIA_SHARE}:/mnt/Media
     restart: always
