@@ -9,6 +9,7 @@ services:
       - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
       - CLOUDFLARE_ZONE_API_TOKEN=${CLOUDFLARE_ZONE_API_TOKEN}
       - LETS_ENCRYPT_EMAIL=${LETS_ENCRYPT_EMAIL}
+      - TZ=${TIMEZONE}
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
