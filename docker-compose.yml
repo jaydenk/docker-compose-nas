@@ -214,6 +214,7 @@ services:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
+      - HAS_IPV6=false
     volumes:
       - ./sabnzbd:/config
       - ${DATA_ROOT}:/data
