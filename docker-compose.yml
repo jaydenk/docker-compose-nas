@@ -229,21 +229,30 @@ services:
       - homepage.href=/sabnzbd
       - homepage.description=Usenet
       - homepage.weight=6
-  heimdall:
-    image: lscr.io/linuxserver/heimdall
-    container_name: heimdall
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
     environment:
-      - PUID=${USER_ID}
-      - PGID=${GROUP_ID}
+      - HOMEPAGE_VAR_TITLE=${HOMEPAGE_VAR_TITLE}
+      - HOMEPAGE_VAR_SEARCH_PROVIDER=${HOMEPAGE_VAR_SEARCH_PROVIDER}
+      - HOMEPAGE_VAR_HEADER_STYLE=${HOMEPAGE_VAR_HEADER_STYLE}
+      - HOMEPAGE_VAR_WEATHER_CITY=${HOMEPAGE_VAR_WEATHER_CITY}
+      - HOMEPAGE_VAR_WEATHER_LAT=${HOMEPAGE_VAR_WEATHER_LAT}
+      - HOMEPAGE_VAR_WEATHER_LONG=${HOMEPAGE_VAR_WEATHER_LONG}
+      - HOMEPAGE_VAR_WEATHER_TIME=${TIMEZONE}
+      - HOMEPAGE_VAR_WEATHER_UNIT=${HOMEPAGE_VAR_WEATHER_UNIT}
     volumes:
-      - ./heimdall:/config
+      - ./homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DATA_ROOT}:/data
     restart: always
+    command: [sh, -c, "cp -n /app/config/tpl/*.yaml /app/config && node server.js"]
     labels:
       - traefik.enable=true
-      - traefik.http.routers.heimdall.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/`))
-      - traefik.http.routers.heimdall.tls=true
-      - traefik.http.routers.heimdall.tls.certresolver=myresolver
-      - traefik.http.services.heimdall.loadbalancer.server.port=80
+      - traefik.http.routers.homepage.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/`))
+      - traefik.http.routers.homepage.tls=true
+      - traefik.http.routers.homepage.tls.certresolver=myresolver
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
