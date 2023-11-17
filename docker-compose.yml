@@ -20,10 +20,10 @@ services:
       - --entrypoints.web.http.redirections.entryPoint.to=web-secure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
-      - --experimental.plugins.rewrite-body.modulename=github.com/packruler/rewrite-body
-      - --experimental.plugins.rewrite-body.version=v1.2.0
-      - --experimental.plugins.rewriteHeaders.modulename=github.com/XciD/traefik-plugin-rewrite-headers
-      - --experimental.plugins.rewriteHeaders.version=v0.0.3
+      #- --experimental.plugins.rewrite-body.modulename=github.com/packruler/rewrite-body
+      #- --experimental.plugins.rewrite-body.version=v1.2.0
+      #- --experimental.plugins.rewriteHeaders.modulename=github.com/XciD/traefik-plugin-rewrite-headers
+      #- --experimental.plugins.rewriteHeaders.version=v0.0.3
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=${DNS_CHALLENGE_PROVIDER:-cloudflare}
       # Uncomment to test your configuration by using Let's Encrypt staging certificates
