@@ -37,6 +37,7 @@ services:
     volumes:
       - ./letsencrypt:/letsencrypt
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - TZ=${TIMEZONE}
     healthcheck:
       test: [ "CMD", "traefik", "healthcheck", "--ping" ]
       interval: 5s
@@ -129,7 +130,7 @@ services:
       - homepage.name=readarr
       - homepage.icon=readarr.png
       - homepage.href=/readarr
-      - homepage.description=Music management
+      - homepage.description=Book management
       - homepage.weight=2
       - homepage.widget.type=readarr
       - homepage.widget.url=http://readarr:8787/readarr
