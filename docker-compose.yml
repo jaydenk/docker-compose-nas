@@ -116,7 +116,7 @@ services:
       - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8686/readarr/ping" ]
+      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8787/readarr/ping" ]
       interval: 5s
       retries: 10
     labels:
@@ -124,7 +124,7 @@ services:
       - traefik.http.routers.readarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/readarr`))
       - traefik.http.routers.readarr.tls=true
       - traefik.http.routers.readarr.tls.certresolver=myresolver
-      - traefik.http.services.readarr.loadbalancer.server.port=8686
+      - traefik.http.services.readarr.loadbalancer.server.port=8787
       - homepage.group=Media
       - homepage.name=readarr
       - homepage.icon=readarr.png
@@ -132,7 +132,7 @@ services:
       - homepage.description=Music management
       - homepage.weight=2
       - homepage.widget.type=readarr
-      - homepage.widget.url=http://readarr:8686/readarr
+      - homepage.widget.url=http://readarr:8787/readarr
       - homepage.widget.key=${readarr_API_KEY}
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
