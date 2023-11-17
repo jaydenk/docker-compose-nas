@@ -103,37 +103,37 @@ services:
       - homepage.widget.type=radarr
       - homepage.widget.url=http://radarr:7878/radarr
       - homepage.widget.key=${RADARR_API_KEY}
-  lidarr:
-    image: lscr.io/linuxserver/lidarr
-    container_name: lidarr
+  readarr:
+    image: lscr.io/linuxserver/readarr
+    container_name: readarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - ./lidarr:/config
+      - ./readarr:/config
       - ${DATA_ROOT}:/data
       - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8686/lidarr/ping" ]
+      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8686/readarr/ping" ]
       interval: 5s
       retries: 10
     labels:
       - traefik.enable=true
-      - traefik.http.routers.lidarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/lidarr`))
-      - traefik.http.routers.lidarr.tls=true
-      - traefik.http.routers.lidarr.tls.certresolver=myresolver
-      - traefik.http.services.lidarr.loadbalancer.server.port=8686
+      - traefik.http.routers.readarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/readarr`))
+      - traefik.http.routers.readarr.tls=true
+      - traefik.http.routers.readarr.tls.certresolver=myresolver
+      - traefik.http.services.readarr.loadbalancer.server.port=8686
       - homepage.group=Media
-      - homepage.name=Lidarr
-      - homepage.icon=lidarr.png
-      - homepage.href=/lidarr
+      - homepage.name=readarr
+      - homepage.icon=readarr.png
+      - homepage.href=/readarr
       - homepage.description=Music management
       - homepage.weight=2
-      - homepage.widget.type=lidarr
-      - homepage.widget.url=http://lidarr:8686/lidarr
-      - homepage.widget.key=${LIDARR_API_KEY}
+      - homepage.widget.type=readarr
+      - homepage.widget.url=http://readarr:8686/readarr
+      - homepage.widget.key=${readarr_API_KEY}
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
