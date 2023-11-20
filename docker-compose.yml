@@ -33,10 +33,10 @@ services:
     volumes:
       - ./letsencrypt:/letsencrypt
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    healthcheck:
-      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
-      interval: 5s
-      retries: 10
+#     healthcheck:
+#       test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+#       interval: 5s
+#       retries: 10
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik-api.rule=(Host(`traefik.${HOSTNAME}`) && PathPrefix(`/api`))
@@ -220,10 +220,10 @@ services:
       - ./sabnzbd:/config
       - ${DATA_ROOT}:/data
     restart: always
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8181/sabnzbd/ping" ]
-      interval: 5s
-      retries: 10
+#     healthcheck:
+#       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8181/sabnzbd/ping" ]
+#       interval: 5s
+#       retries: 10
     labels:
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
