@@ -166,7 +166,7 @@ services:
       - homepage.widget.url=http://prowlarr:9696/prowlarr
       - homepage.widget.key=${PROWLARR_API_KEY}
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:4.6.0
+    image: lscr.io/linuxserver/qbittorrent
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
