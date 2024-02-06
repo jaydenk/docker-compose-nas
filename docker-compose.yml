@@ -132,6 +132,7 @@ services:
       - homepage.widget.key=${PROWLARR_API_KEY}
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -203,8 +204,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-networks:
-  default:
-    name: docker-compose-nas
+# networks:
+#   default:
+#     name: docker-compose-nas
   proxy:
     external: true
