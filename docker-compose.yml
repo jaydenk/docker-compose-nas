@@ -1,48 +1,5 @@
 version: "3.9"
 services:
-  traefik:
-    image: traefik:latest
-    container_name: traefik
-    restart: always
-    environment:
-      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
-      - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
-      - CLOUDFLARE_ZONE_API_TOKEN=${CLOUDFLARE_ZONE_API_TOKEN}
-      - LETS_ENCRYPT_EMAIL=${LETS_ENCRYPT_EMAIL}
-      - TZ=${TIMEZONE}
-    command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --api.dashboard=true 
-      - --api.insecure=true
-      - --entrypoints.web.address=:80
-      - --entrypoints.web-secure.address=:443
-      - --entrypoints.web.http.redirections.entryPoint.to=web-secure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --entrypoints.web.http.redirections.entrypoint.permanent=true
-      - --certificatesresolvers.myresolver.acme.dnschallenge=true
-      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=${DNS_CHALLENGE_PROVIDER:-cloudflare}
-      # Uncomment to test your configuration by using Let's Encrypt staging certificates
-     #- --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.myresolver.acme.email=${LETS_ENCRYPT_EMAIL}
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      - --log.level=DEBUG
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./letsencrypt:/letsencrypt
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-#     healthcheck:
-#       test: [ "CMD", "traefik", "healthcheck", "--ping" ]
-#       interval: 5s
-#       retries: 10
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.traefik-api.rule=(Host(`traefik.${HOSTNAME}`) && PathPrefix(`/api`))
-      - traefik.http.routers.traefik-api.tls=true
-      - traefik.http.routers.traefik-api.tls.certresolver=myresolver
-      - traefik.http.services.traefik-api.loadbalancer.server.port=8080
   sonarr:
     image: lscr.io/linuxserver/sonarr
     container_name: sonarr
@@ -59,9 +16,11 @@ services:
       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8989/sonarr/ping" ]
       interval: 5s
       retries: 10
+    networks:
+      - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sonarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sonarr`))
+      - traefik.http.routers.sonarr.rule=(Host(`sonarr.${HOSTNAME}`))
       - traefik.http.routers.sonarr.tls=true
       - traefik.http.routers.sonarr.tls.certresolver=myresolver
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
@@ -90,9 +49,11 @@ services:
       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:7878/radarr/ping" ]
       interval: 5s
       retries: 10
+    networks:
+      - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.radarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/radarr`))
+      - traefik.http.routers.radarr.rule=(Host(`radarr.${HOSTNAME}`))
       - traefik.http.routers.radarr.tls=true
       - traefik.http.routers.radarr.tls.certresolver=myresolver
       - traefik.http.services.radarr.loadbalancer.server.port=7878
@@ -121,9 +82,11 @@ services:
       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8787/readarr/ping" ]
       interval: 5s
       retries: 10
+    networks:
+      - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.readarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/readarr`))
+      - traefik.http.routers.readarr.rule=(Host(`readarr.${HOSTNAME}`))
       - traefik.http.routers.readarr.tls=true
       - traefik.http.routers.readarr.tls.certresolver=myresolver
       - traefik.http.services.readarr.loadbalancer.server.port=8787
@@ -150,9 +113,11 @@ services:
       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:9696/prowlarr/ping" ]
       interval: 5s
       retries: 10
+    networks:
+      - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prowlarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/prowlarr`))
+      - traefik.http.routers.prowlarr.rule=(Host(`prowlarr.${HOSTNAME}`))
       - traefik.http.routers.prowlarr.tls=true
       - traefik.http.routers.prowlarr.tls.certresolver=myresolver
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
@@ -183,9 +148,11 @@ services:
       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8080", "https://google.com" ]
       interval: 5s
       retries: 10
+    networks:
+      - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.qbittorrent.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/qbittorrent`))
+      - traefik.http.routers.qbittorrent.rule=(Host(`qbittorrent.${HOSTNAME}`))
       - traefik.http.routers.qbittorrent.tls=true
       - traefik.http.routers.qbittorrent.tls.certresolver=myresolver
       - traefik.http.services.qbittorrent.loadbalancer.server.port=8080
@@ -207,34 +174,6 @@ services:
       - homepage.widget.url=http://qbittorrent:8080
       - homepage.widget.username=${QBITTORRENT_USERNAME}
       - homepage.widget.password=${QBITTORRENT_PASSWORD}
-  sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    environment:
-      - PUID=${USER_ID}
-      - PGID=${GROUP_ID}
-      - TZ=${TIMEZONE}
-      - HAS_IPV6=false
-    volumes:
-      - ./sabnzbd:/config
-      - ${DATA_ROOT}:/data
-    restart: always
-#     healthcheck:
-#       test: [ "CMD", "curl", "--fail", "http://127.0.0.1:8181/sabnzbd/ping" ]
-#       interval: 5s
-#       retries: 10
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.sabnzbd.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
-      - traefik.http.routers.sabnzbd.tls=true
-      - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
-      - traefik.http.services.sabnzbd.loadbalancer.server.port=8181
-      - homepage.group=Media
-      - homepage.name=Sabnzbd
-      - homepage.icon=sabnzbd.png
-      - homepage.href=/sabnzbd
-      - homepage.description=Usenet
-      - homepage.weight=6
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
@@ -267,3 +206,5 @@ services:
 networks:
   default:
     name: docker-compose-nas
+  proxy:
+    external: true
