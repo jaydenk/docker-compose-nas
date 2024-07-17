@@ -18,6 +18,10 @@ services:
       retries: 10
     networks:
       - proxy
+    dns:
+      - 192.168.10.200
+      - 192.168.10.201
+      - 1.1.1.1
     labels:
       - traefik.enable=true
       - traefik.http.routers.sonarr.rule=(Host(`sonarr.${HOSTNAME}`))
@@ -51,6 +55,10 @@ services:
       retries: 10
     networks:
       - proxy
+    dns:
+      - 192.168.10.200
+      - 192.168.10.201
+      - 1.1.1.1
     labels:
       - traefik.enable=true
       - traefik.http.routers.radarr.rule=(Host(`radarr.${HOSTNAME}`))
@@ -84,6 +92,10 @@ services:
       retries: 10
     networks:
       - proxy
+    dns:
+      - 192.168.10.200
+      - 192.168.10.201
+      - 1.1.1.1
     labels:
       - traefik.enable=true
       - traefik.http.routers.readarr.rule=(Host(`readarr.${HOSTNAME}`))
@@ -115,6 +127,10 @@ services:
       retries: 10
     networks:
       - proxy
+    dns:
+      - 192.168.10.200
+      - 192.168.10.201
+      - 1.1.1.1
     labels:
       - traefik.enable=true
       - traefik.http.routers.prowlarr.rule=(Host(`prowlarr.${HOSTNAME}`))
@@ -151,6 +167,10 @@ services:
       retries: 10
     networks:
       - proxy
+    dns:
+      - 192.168.10.200
+      - 192.168.10.201
+      - 1.1.1.1
     labels:
       - traefik.enable=true
       - traefik.http.routers.qbittorrent.rule=(Host(`qbittorrent.${HOSTNAME}`))
@@ -188,6 +208,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${DATA_ROOT}:/data
     restart: always
+    dns:
+      - 192.168.10.200
+      - 192.168.10.201
+      - 1.1.1.1
     command: [sh, -c, "cp -n /app/config/tpl/*.yaml /app/config && node server.js"]
     labels:
       - traefik.enable=true
