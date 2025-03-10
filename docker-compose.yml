@@ -156,8 +156,8 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - ./qbittorrent:/config
-      - ${DATA_ROOT}:/data
-      - ${MEDIA_SHARE}:/mnt/Media
+      - ${DATA_ROOT}:/data/downloads
+#       - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     healthcheck:
       # Container may fail if the PIA's token expired, so mark as unhealthy when there is no internet connection
