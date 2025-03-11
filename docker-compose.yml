@@ -156,7 +156,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - ./qbittorrent:/config
-      - ${DATA_ROOT}:/data/downloads
+      - ${DATA_ROOT}:/data/torrents
 #       - ${MEDIA_SHARE}:/mnt/Media
     restart: always
     healthcheck:
